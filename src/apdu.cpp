@@ -55,6 +55,35 @@ static void FillBE(APDU *apdu, T n) {
   }
 }
 
+static void FillRaw(APDU *apdu, size_t n, const uint8_t *bytes) {
+  if (apdu->size + n > apdu->max_size) {
+    throw std::logic_error("APDU size would exceed limit");
+  }
+
+  std::copy(bytes, bytes + n, apdu->buffer + apdu->size);
+  apdu->size += n;
+}
+
+static void FillHex(APDU *apdu, const char *s, bool reverse) {
+  std::vector<uint8_t> temp;
+
+  for (; s[0] != '\0' && s[1] != '\0'; s += 2) {
+    int b;
+    sscanf(s, "%02x", &b);
+    temp.emplace_back(static_cast<uint8_t>(b));
+  }
+  if (apdu->size + temp.size() > apdu->max_size) {
+    throw std::logic_error("APDU size would exceed limit");
+  }
+
+  if (reverse) {
+    std::copy(temp.rbegin(), temp.rend(), apdu->buffer + apdu->size);
+  } else {
+    std::copy(temp.begin(), temp.end(), apdu->buffer + apdu->size);
+  }
+  apdu->size += temp.size();
+}
+
 int ApduWrite(APDU *apdu, const char *fmt, ...) {
   size_t old_size = apdu->size;
   int result;
@@ -91,36 +120,13 @@ int ApduWrite(APDU *apdu, const char *fmt, ...) {
         case 'r':
         case 'R': {
           size_t n = va_arg(args, size_t);
-          if (apdu->size + n > apdu->max_size) {
-            result = APDU_ERR_SIZE_MISMATCH;
-            goto cleanup;
-          }
-
           const uint8_t *bytes = va_arg(args, uint8_t *);
-          std::copy(bytes, bytes + n, apdu->buffer + apdu->size);
-          apdu->size += n;
+          FillRaw(apdu, n, bytes);
         } break;
         case 'x':
         case 'X': {
           const char *s = va_arg(args, char *);
-          std::vector<uint8_t> temp;
-
-          for (; s[0] != '\0' && s[1] != '\0'; s += 2) {
-            int b;
-            sscanf(s, "%02x", &b);
-            temp.emplace_back(static_cast<uint8_t>(b));
-          }
-          if (apdu->size + temp.size() > apdu->max_size) {
-            result = APDU_ERR_SIZE_MISMATCH;
-            goto cleanup;
-          }
-
-          if (*fmt == 'x') {
-            std::copy(temp.rbegin(), temp.rend(), apdu->buffer + apdu->size);
-          } else {
-            std::copy(temp.begin(), temp.end(), apdu->buffer + apdu->size);
-          }
-          apdu->size += temp.size();
+          FillHex(apdu, s, (*fmt == 'x'));
         } break;
         default:
           result = APDU_ERR_INVALID_FORMAT;
