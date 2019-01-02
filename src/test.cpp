@@ -32,12 +32,12 @@ int main() {
 
   // Test little- and big-endian serialization
   uint32_t value = 0x0a0b0c0d;
-  uint8_t big_endian[] { 0x0a, 0x0b, 0x0c, 0x0d };
+  uint8_t big_endian[]{0x0a, 0x0b, 0x0c, 0x0d};
   ApduWrite(&apdu, "D", value);
   assert(memcmp(apdu.buffer + 5, big_endian, 4) == 0);
 
   ApduInit(&apdu, 1, 2, 3, 4, buffer, 200);
-  uint8_t little_endian[] { 0x0d, 0x0c, 0x0b, 0x0a };
+  uint8_t little_endian[]{0x0d, 0x0c, 0x0b, 0x0a};
   ApduWrite(&apdu, "d", value);
   assert(memcmp(apdu.buffer + 5, little_endian, 4) == 0);
 
@@ -48,9 +48,8 @@ int main() {
   assert(result == 10);
   assert(apdu.size == 15);
 
-  uint8_t expected[] = {
-      0x01, 0x02, 0x03, 0x04, 0x0a, 0xca, 0xfe, 0xba, 0xbe, 0xde, 0xad, 0xbe,
-      0xef, 0x01, 0x02};
+  uint8_t expected[] = {0x01, 0x02, 0x03, 0x04, 0x0a, 0xca, 0xfe, 0xba,
+                        0xbe, 0xde, 0xad, 0xbe, 0xef, 0x01, 0x02};
   assert(memcmp(apdu.buffer, expected, apdu.size) == 0);
 
   return 0;
