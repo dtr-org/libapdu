@@ -30,7 +30,7 @@ statically compiled library. Optionally, run `make test` for the unit tests.
 A description of the APDUs implemented by the Ledger Bitcoin app can be found
 [in the technical specification][1].
 
-Generic information about APDUs in the Ledger SDK is available [here].
+Generic information about APDUs in the Ledger SDK is available [here][2].
 
 [1]: https://ledgerhq.github.io/btchip-doc/bitcoin-technical-beta.html
 
