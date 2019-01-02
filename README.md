@@ -3,7 +3,7 @@
 This is a convenience library for handling ISO7816-4 application protocol data
 units (APDUs), a protocol used to communicate with devices like smartcards and,
 incidentally, the Ledger Nano S and Ledger Blue hardware wallets. APDUs are
-used for sendng commands to the wallet, for example, generating a new public
+used for sending commands to the wallet, for example, generating a new public
 key, or signing a transaction.
 
 The format of a command APDU is:
