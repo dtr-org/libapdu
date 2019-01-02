@@ -1,2 +1,2 @@
 language: cpp
-script: mkdir -p build && cd build && cmake .. && make test
+script: mkdir -p build && cd build && cmake .. && ctest

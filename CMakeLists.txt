@@ -5,4 +5,5 @@ add_library(apdu STATIC src/apdu.cpp)
 add_executable(unit_tests src/test.cpp)
 target_link_libraries(unit_tests apdu)
 
-add_custom_target(test ./unit_tests DEPENDS unit_tests)
+enable_testing()
+add_test(NAME unit-tests COMMAND unit_tests)
