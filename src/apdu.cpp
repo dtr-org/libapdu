@@ -38,7 +38,7 @@ static void FillLE(APDU *apdu, T n) {
   if (apdu->size + sizeof(n) > apdu->max_size) {
     throw std::logic_error("APDU size would exceed limit");
   }
-  for (int i = 0; i < sizeof(n); i++) {
+  for (size_t i = 0; i < sizeof(n); i++) {
     apdu->buffer[apdu->size++] = (n >> (8 * i)) & 0xff;
   }
 }
@@ -50,7 +50,7 @@ static void FillBE(APDU *apdu, T n) {
   if (apdu->size + sizeof(n) > apdu->max_size) {
     throw std::logic_error("APDU size would exceed limit");
   }
-  for (int i = 0; i < sizeof(n); i++) {
+  for (size_t i = 0; i < sizeof(n); i++) {
     apdu->buffer[apdu->size++] = (n >> (8 * (sizeof(n) - 1 - i))) & 0xff;
   }
 }
@@ -140,7 +140,7 @@ int ApduWrite(APDU *apdu, const char *fmt, ...) {
 
     // Return bytes written
     result = apdu->size - old_size;
-  } catch (std::logic_error ex) {
+  } catch (const std::logic_error& ex) {
     result = APDU_ERR_SIZE_MISMATCH;
   }
 

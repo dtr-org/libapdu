@@ -2,7 +2,7 @@ LIBRARY = apdu
 LIBRARY_FILE = build/lib$(LIBRARY).a
 OBJECT_FILES = src/apdu.o
 TEST_FILES = src/test.o
-CXXFLAGS = -std=c++11
+CXXFLAGS = -std=c++11 -Wall
 
 all: $(LIBRARY_FILE)
 
