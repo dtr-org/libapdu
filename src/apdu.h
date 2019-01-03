@@ -46,9 +46,10 @@ extern "C" {
 //!
 //! Sets the initial size and backing buffer of the APDU, as well as the header
 //! bytes. The buffer must be allocated by the caller.
-//! \returns APDU_OK on success, or APDU_ERR_SIZE_MISMATCH if the buffer is too small.
-int ApduInit(APDU *apdu, uint8_t cla, uint8_t ins, uint8_t p1,
-             uint8_t p2, uint8_t *buffer, size_t buffer_size);
+//! \returns APDU_OK on success, or APDU_ERR_SIZE_MISMATCH if the buffer is too
+//! small.
+int ApduInit(APDU *apdu, uint8_t cla, uint8_t ins, uint8_t p1, uint8_t p2,
+             uint8_t *buffer, size_t buffer_size);
 
 //! \brief Write one or more values to an APDU structure.
 //!
@@ -61,10 +62,11 @@ int ApduInit(APDU *apdu, uint8_t cla, uint8_t ins, uint8_t p1,
 //! \li 'd', 'D' - as a little-endian or big-endian dword (4 bytes)
 //! \li 'q', 'Q' - as a little-endian or big-endian qword (8 bytes)
 //! \li 'x', 'X' - interprets the vararg as an ASCII string of hex values, and
-//!                writes them to the buffer as-is ('X') or in reverse order ('x')
-//! \li 'r', 'R' - writes a raw binary sequence. Expects two arguments: the first
-//!                one (N) interpreted as \c size_t , the second one as a pointer
-//!                to N bytes to be written.
+//!                writes them to the buffer as-is ('X') or in reverse order
+//!                ('x')
+//! \li 'r', 'R' - writes a raw binary sequence. Expects two arguments: the
+//!                first one (N) interpreted as \c size_t , the second one as a
+//!                pointer to N bytes to be written.
 //!
 //! As an example, the following call to ApduWrite:
 //!    ApduWrite(apdu, "bdX", 5, 1024, "010203")

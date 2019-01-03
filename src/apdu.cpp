@@ -10,8 +10,8 @@
 
 #include "apdu.h"
 
-int ApduInit(APDU *apdu, uint8_t cla, uint8_t ins, uint8_t p1,
-             uint8_t p2, uint8_t *buffer, size_t buffer_size) {
+int ApduInit(APDU *apdu, uint8_t cla, uint8_t ins, uint8_t p1, uint8_t p2,
+             uint8_t *buffer, size_t buffer_size) {
   if (buffer_size > IO_APDU_BUFFER_SIZE) {
     buffer_size = IO_APDU_BUFFER_SIZE;
   }
@@ -60,12 +60,20 @@ static void FillRaw(APDU *apdu, size_t n, const uint8_t *bytes) {
     throw std::logic_error("APDU size would exceed limit");
   }
 
+  if (!bytes) {
+    throw std::logic_error("Invalid argument");
+  }
+
   std::copy(bytes, bytes + n, apdu->buffer + apdu->size);
   apdu->size += n;
 }
 
 static void FillHex(APDU *apdu, const char *s, bool reverse) {
   std::vector<uint8_t> temp;
+
+  if (!s) {
+    throw std::logic_error("Invalid argument");
+  }
 
   for (; s[0] != '\0' && s[1] != '\0'; s += 2) {
     int b;
@@ -140,7 +148,7 @@ int ApduWrite(APDU *apdu, const char *fmt, ...) {
 
     // Return bytes written
     result = apdu->size - old_size;
-  } catch (const std::logic_error& ex) {
+  } catch (const std::logic_error &ex) {
     result = APDU_ERR_SIZE_MISMATCH;
   }
 
@@ -156,6 +164,4 @@ void BufferDump(const uint8_t *buffer, size_t size) {
   printf("\n");
 }
 
-void ApduDump(const APDU *apdu) {
-  BufferDump(apdu->buffer, apdu->size);
-}
+void ApduDump(const APDU *apdu) { BufferDump(apdu->buffer, apdu->size); }
