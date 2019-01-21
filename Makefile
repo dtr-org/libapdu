@@ -1,9 +1,9 @@
-libapdu.a: build
-	$(MAKE) -C build all
+libapdu.a: build/Makefile
+	$(MAKE) -C build
 
 clean: build
 	$(MAKE) -C build clean
 
-build: CMakeLists.txt
+build/Makefile: CMakeLists.txt
 	mkdir -p build
 	cd build && cmake ..
